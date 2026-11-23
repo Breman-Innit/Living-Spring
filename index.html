@@ -114,7 +114,7 @@ nav.innerHTML=M.map(m=>`<a href="#${m[0]}" data-id="${m[0]}">${m[1]}</a>`).join(
 const tag=s=>`<span class="tag ${/Draft|Closed|Paused|Not marked|Unread|Pending|Awaiting|Overdue|Suspended|Needs|Review|Running|On leave|Part/.test(s)?"m":""}">${s}</span>`;
 function dash(){
 const rows=[["Science: Cells","Live class · 10:00","S"],["Parents' evening","3 December","P"],["Term 2 fees","14 families still owe","F"],["Mathematics grades","Form 3A awaiting review","G"]];
-main.innerHTML=`<h1>Good morning, Grace</h1><p class="lead">Here is what is happening at Living Spring today.</p>
+main.innerHTML=`<h1>Good morning, Admin</h1><p class="lead">Here is what is happening at Living Spring today.</p>
 <div class="stats"><div><b>642</b><span>Students enrolled</span></div><div><b>38</b><span>Instructors</span></div><div><b>94%</b><span>Attendance today</span></div><div><b>GH₵ 18,400</b><span>Fees collected this week</span></div></div>
 <div class="sh"><h2>Needs attention</h2></div>
 ${rows.map(r=>`<a class="row" href="#${r[2]=="S"?"classroom":r[2]=="P"?"calendar":r[2]=="F"?"payments":"grading"}"><div class="av">${r[2]}</div><div><b style="font-weight:500">${r[0]}</b><small>${r[1]}</small></div><span class="ar">→</span></a>`).join("")}
