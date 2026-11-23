@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Living Spring School</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Source+Serif+4:wght@500;600&display=swap">
+<style>
+:root{--bg:#fff;--fg:#0f1a14;--muted:#f4f7f5;--mfg:#5f6b64;--border:#e2e8e4;--primary:#1f7a45;--primary-fg:#fff;--primary-soft:#e8f3ec;--ease:cubic-bezier(.21,.47,.32,.98);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1511;--fg:#eef3f0;--muted:#16201a;--mfg:#9aa8a0;--border:#243029;--primary:#3fae6b;--primary-fg:#08130c;--primary-soft:#163223}}
+:root[data-theme="dark"]{--bg:#0e1511;--fg:#eef3f0;--muted:#16201a;--mfg:#9aa8a0;--border:#243029;--primary:#3fae6b;--primary-fg:#08130c;--primary-soft:#163223}
+*{box-sizing:border-box;margin:0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 Inter,system-ui,sans-serif;min-height:100vh}
+h1,h2,h3{font-family:"Source Serif 4",Georgia,serif;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+h1{font-size:clamp(30px,4vw,36px)}h2{font-size:20px}
+a{color:inherit}button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--border);height:56px;display:flex;align-items:center;gap:12px;padding:0 20px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+.brand{font:600 19px "Source Serif 4",serif;letter-spacing:-.02em;text-decoration:none;display:flex;align-items:center;gap:8px}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--primary)}
+.sp{flex:1}
+.btn{height:40px;padding:0 16px;border-radius:6px;border:1px solid var(--border);background:var(--bg);cursor:pointer;font-weight:500;transition:background .25s var(--ease),transform .25s var(--ease)}
+.btn:hover{background:var(--muted)}
+.btn.p{background:var(--primary);border-color:var(--primary);color:var(--primary-fg)}.btn.p:hover{opacity:.9;background:var(--primary)}
+.btn.g{border-color:transparent}
+#menu{display:none}
+.shell{display:flex;max-width:1280px;margin:0 auto}
+nav{width:248px;flex:none;border-right:1px solid var(--border);padding:16px 12px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
+nav a{display:block;padding:8px 12px;border-radius:6px;text-decoration:none;color:var(--mfg);font-size:14px;transition:background .25s var(--ease)}
+nav a:hover{background:var(--muted);color:var(--fg)}
+nav a[aria-current=page]{background:var(--primary-soft);color:var(--primary);font-weight:600}
+main{flex:1;min-width:0;padding:40px 20px 64px;max-width:1000px}
+.lead{color:var(--mfg);max-width:60ch;margin-top:8px}
+.bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:32px 0 16px}
+.search{flex:1;min-width:200px;height:44px;border:1px solid var(--border);border-radius:6px;padding:0 14px;background:var(--bg)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.chip{border:1px solid var(--border);border-radius:999px;padding:4px 14px;background:var(--bg);cursor:pointer;font-size:13px}
+.chip[aria-pressed=true]{background:var(--primary);border-color:var(--primary);color:var(--primary-fg)}
+.tw{overflow-x:auto;border:1px solid var(--border);border-radius:6px}
+table{width:100%;border-collapse:collapse;min-width:520px}
+th{text-align:left;font-weight:500;color:var(--mfg);font-size:13px;padding:12px 16px;border-bottom:1px solid var(--border)}
+td{padding:14px 16px;border-bottom:1px solid var(--border)}
+tr:last-child td{border-bottom:0}tbody tr:hover{background:var(--muted)}
+.tag{font-size:12px;padding:2px 10px;border-radius:999px;background:var(--primary-soft);color:var(--primary);white-space:nowrap}
+.tag.m{background:var(--muted);color:var(--mfg)}
+.empty{border:1px dashed var(--border);border-radius:6px;padding:40px 20px;text-align:center;color:var(--mfg)}
+.empty button{margin-top:8px;background:none;border:0;color:var(--primary);text-decoration:underline;cursor:pointer}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:24px;margin:32px 0 48px;padding:24px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.stats b{display:block;font:600 32px "Source Serif 4",serif;letter-spacing:-.02em}.stats span{color:var(--mfg);font-size:13px}
+.sh{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.sh a{font-size:13px;color:var(--mfg)}
+.row{display:flex;gap:12px;align-items:center;padding:12px;border-radius:6px;text-decoration:none;transition:background .25s var(--ease)}
+.row:hover{background:var(--muted)}.row:hover .ar{transform:translateX(4px)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--muted);display:grid;place-items:center;font-weight:600;color:var(--primary);flex:none}
+.row small{display:block;color:var(--mfg)}.row div:nth-child(2){flex:1;min-width:0}
+.ar{transition:transform .25s var(--ease);color:var(--mfg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:4px 24px}
+.sec{margin-top:48px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s var(--ease),transform .3s var(--ease);z-index:40}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+main>*{animation:in .5s var(--ease) both}
+@keyframes in{from{opacity:0;transform:translateY(12px)}}
+@media(max-width:860px){
+#menu{display:inline-block}
+nav{position:fixed;top:calc(56px + env(safe-area-inset-top,0px));left:0;bottom:0;background:var(--bg);z-index:25;height:auto;transform:translateX(-100%);transition:transform .3s var(--ease);width:min(300px,86vw)}
+nav.open{transform:none}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+<button class="btn g" id="menu" aria-label="Open menu" aria-expanded="false">Menu</button>
+<a class="brand" href="#dashboard"><span class="dot"></span>Living Spring</a>
+<span class="sp"></span>
+<button class="btn g" id="theme" aria-label="Toggle dark mode">Theme</button>
+<div class="av" aria-label="Signed in as Grace Mensah" title="Grace Mensah">GM</div>
+</header>
+<div class="shell">
+<nav id="nav" aria-label="Main"></nav>
+<main id="main" tabindex="-1"></main>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const M=[
+["dashboard","Dashboard","A clear view of today across classes, people and payments."],
+["users","User Management","Create accounts, assign roles and control who can sign in.","Add user",["Name","Role","Email","Status"],[["Ama Boateng","Admin","ama@livingspring.edu","Active"],["Kojo Asare","Instructor","kojo@livingspring.edu","Active"],["Efua Owusu","Student","efua@livingspring.edu","Active"],["Yaw Darko","Registrar","yaw@livingspring.edu","Suspended"]]],
+["courses","Course Management","Build and publish the courses offered each term.","New course",["Course","Code","Instructor","Status"],[["Integrated Science","SCI201","Kojo Asare","Published"],["English Literature","ENG110","Abena Frimpong","Published"],["Mathematics II","MTH202","Samuel Tetteh","Draft"],["Basic Computing","ICT101","Nana Addo","Published"]]],
+["students","Student Management","Admissions, enrolment records and guardian details.","Enrol student",["Student","Class","Guardian","Status"],[["Efua Owusu","Form 2A","Mrs. Owusu","Enrolled"],["Kwame Nti","Form 1B","Mr. Nti","Enrolled"],["Akosua Gyan","Form 3A","Mrs. Gyan","Pending"],["Esi Quaye","Form 2B","Mr. Quaye","Enrolled"]]],
+["instructors","Instructor Management","Staff profiles, subjects and teaching loads.","Add instructor",["Instructor","Subject","Classes","Status"],[["Kojo Asare","Science","6","Active"],["Abena Frimpong","English","5","Active"],["Samuel Tetteh","Mathematics","7","On leave"],["Nana Addo","ICT","4","Active"]]],
+["content","Learning Content Management","Upload and organise lessons, videos and reading material.","Upload content",["Title","Course","Type","Status"],[["Photosynthesis basics","SCI201","Video","Published"],["Poetry anthology","ENG110","PDF","Published"],["Quadratic equations","MTH202","Lesson","Draft"],["Spreadsheet skills","ICT101","Slides","Published"]]],
+["assignments","Assignment Management","Set work, track submissions and review late hand-ins.","New assignment",["Assignment","Course","Due","Status"],[["Plant cell diagram","SCI201","28 Nov","Open"],["Essay: Things Fall Apart","ENG110","30 Nov","Open"],["Problem set 4","MTH202","21 Nov","Closed"],["Typing practice","ICT101","2 Dec","Open"]]],
+["exams","Examination and Quiz Management","Schedule exams, build question banks and publish quizzes.","Create quiz",["Exam","Course","Date","Status"],[["End of term: Science","SCI201","12 Dec","Scheduled"],["Quiz: Grammar","ENG110","27 Nov","Open"],["Mock: Mathematics","MTH202","5 Dec","Scheduled"],["Quiz: Hardware","ICT101","20 Nov","Closed"]]],
+["grading","Assessment and Grading","Record scores, apply grading scales and release results.","Enter grades",["Class","Subject","Average","Status"],[["Form 2A","Science","74%","Released"],["Form 1B","English","68%","Released"],["Form 3A","Mathematics","61%","In review"],["Form 2B","ICT","82%","In review"]]],
+["attendance","Attendance Management","Mark daily attendance and follow up on absences.","Mark attendance",["Class","Present","Absent","Status"],[["Form 1B","38","2","Marked"],["Form 2A","35","3","Marked"],["Form 2B","31","6","Marked"],["Form 3A","—","—","Not marked"]]],
+["progress","Student Progress Tracking","See how each learner is moving through their courses.","Export progress",["Student","Course","Completion","Status"],[["Efua Owusu","SCI201","82%","On track"],["Kwame Nti","ENG110","45%","Needs support"],["Esi Quaye","MTH202","67%","On track"],["Akosua Gyan","ICT101","30%","Needs support"]]],
+["messages","Communication and Messaging","Talk with students, guardians and staff in one place.","New message",["From","Subject","Received","Status"],[["Mrs. Owusu","Question about Efua's report","Today","Unread"],["Kojo Asare","Lab schedule change","Yesterday","Read"],["Mr. Nti","Request for a meeting","Mon","Unread"],["Front office","Visitors on Friday","Fri","Read"]]],
+["notifications","Notification Management","Choose what gets sent, to whom and when.","New rule",["Notification","Audience","Channel","Status"],[["Assignment due soon","Students","Email","Active"],["Absence alert","Guardians","SMS","Active"],["Fee reminder","Guardians","Email","Active"],["Result released","Students","In app","Paused"]]],
+["forums","Discussion Forums","Course conversations moderated by instructors.","Start topic",["Topic","Course","Replies","Status"],[["How do plants absorb water?","SCI201","14","Open"],["Favourite poem this term","ENG110","23","Open"],["Help with factorising","MTH202","8","Answered"],["Posting rules","All","2","Pinned"]]],
+["classroom","Virtual Classroom","Live lessons with recordings available afterwards.","Schedule class",["Session","Instructor","Time","Status"],[["Science: Cells","Kojo Asare","Today, 10:00","Live soon"],["English: Drama","Abena Frimpong","Today, 13:00","Scheduled"],["Maths clinic","Samuel Tetteh","Tue, 15:00","Scheduled"],["ICT: Spreadsheets","Nana Addo","Mon, 09:00","Recorded"]]],
+["certificates","Certificate Management","Design templates and issue certificates on completion.","Issue certificate",["Recipient","Course","Issued","Status"],[["Efua Owusu","Basic Computing","14 Nov","Issued"],["Esi Quaye","English Literature","10 Nov","Issued"],["Kwame Nti","Integrated Science","—","Awaiting approval"],["Akosua Gyan","Basic Computing","—","Awaiting approval"]]],
+["payments","Payment Management","Fees, receipts and outstanding balances.","Record payment",["Student","Item","Amount","Status"],[["Efua Owusu","Term 2 fees","GH₵ 1,200","Paid"],["Kwame Nti","Term 2 fees","GH₵ 1,200","Part paid"],["Akosua Gyan","Term 2 fees","GH₵ 1,200","Overdue"],["Esi Quaye","Exam fee","GH₵ 150","Paid"]]],
+["reports","Reports and Analytics","Reports on enrolment, performance, attendance and income.","Create report",["Report","Period","Format","Status"],[["Term performance","Term 2","PDF","Ready"],["Attendance summary","November","CSV","Ready"],["Fee collection","Term 2","CSV","Running"],["Enrolment trends","2026","PDF","Ready"]]],
+["calendar","Academic Calendar Management","Terms, holidays, exams and school events.","Add event",["Event","Date","Audience","Status"],[["Mid-term break","24 Nov","Everyone","Upcoming"],["Parents' evening","3 Dec","Guardians","Upcoming"],["End of term exams","12 Dec","Students","Upcoming"],["Carol service","18 Dec","Everyone","Upcoming"]]],
+["admin","System Administration","Roles, backups, audit history and school settings.","Add role",["Setting","Area","Updated","Status"],[["Role permissions","Security","Today","Configured"],["Nightly backup","Data","03:00","Healthy"],["Grading scale","Academic","1 Sep","Configured"],["Audit log retention","Security","90 days","Review"]]]
+];
+const $=s=>document.querySelector(s),main=$("#main"),nav=$("#nav");
+const toast=t=>{const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2200)};
+nav.innerHTML=M.map(m=>`<a href="#${m[0]}" data-id="${m[0]}">${m[1]}</a>`).join("");
+const tag=s=>`<span class="tag ${/Draft|Closed|Paused|Not marked|Unread|Pending|Awaiting|Overdue|Suspended|Needs|Review|Running|On leave|Part/.test(s)?"m":""}">${s}</span>`;
+function dash(){
+const rows=[["Science: Cells","Live class · 10:00","S"],["Parents' evening","3 December","P"],["Term 2 fees","14 families still owe","F"],["Mathematics grades","Form 3A awaiting review","G"]];
+main.innerHTML=`<h1>Good morning, Grace</h1><p class="lead">Here is what is happening at Living Spring today.</p>
+<div class="stats"><div><b>642</b><span>Students enrolled</span></div><div><b>38</b><span>Instructors</span></div><div><b>94%</b><span>Attendance today</span></div><div><b>GH₵ 18,400</b><span>Fees collected this week</span></div></div>
+<div class="sh"><h2>Needs attention</h2></div>
+${rows.map(r=>`<a class="row" href="#${r[2]=="S"?"classroom":r[2]=="P"?"calendar":r[2]=="F"?"payments":"grading"}"><div class="av">${r[2]}</div><div><b style="font-weight:500">${r[0]}</b><small>${r[1]}</small></div><span class="ar">→</span></a>`).join("")}
+<div class="sec"><div class="sh"><h2>All areas</h2></div><div class="grid">${M.slice(1).map(m=>`<a class="row" href="#${m[0]}"><div class="av">${m[1][0]}</div><div style="font-weight:500">${m[1]}</div></a>`).join("")}</div></div>`}
+function view(m){
+const sts=[...new Set(m[5].map(r=>r[r.length-1]))];let st="All",q="";
+main.innerHTML=`<h1>${m[1]}</h1><p class="lead">${m[2]}</p>
+<div class="bar"><input class="search" id="q" type="search" placeholder="Search ${m[1].toLowerCase()}" aria-label="Search"><button class="btn p" id="add">${m[3]}</button></div>
+<div class="chips" id="chips">${["All",...sts].map(s=>`<button class="chip" aria-pressed="${s=="All"}">${s}</button>`).join("")}</div><div id="out"></div>`;
+const out=$("#out");
+function draw(){const r=m[5].filter(r=>(st=="All"||r[r.length-1]==st)&&r.join(" ").toLowerCase().includes(q));
+out.innerHTML=r.length?`<div class="tw"><table><thead><tr>${m[4].map(c=>`<th scope="col">${c}</th>`).join("")}</tr></thead><tbody>${r.map(r=>`<tr>${r.map((c,i)=>i==r.length-1?`<td>${tag(c)}</td>`:`<td${i?' style="color:var(--mfg)"':' style="font-weight:500"'}>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">Nothing matches your search.<br><button id="clr">Clear filters</button></div>`;
+const c=$("#clr");if(c)c.onclick=()=>{q="";st="All";$("#q").value="";sync();draw()}}
+const sync=()=>document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.textContent==st));
+$("#q").oninput=e=>{q=e.target.value.toLowerCase();draw()};
+$("#chips").onclick=e=>{if(e.target.classList.contains("chip")){st=e.target.textContent;sync();draw()}};
+$("#add").onclick=()=>toast(m[3]+" is ready to start");draw()}
+function route(){const id=location.hash.slice(1)||"dashboard",m=M.find(x=>x[0]==id)||M[0];
+document.querySelectorAll("nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.id==m[0]));
+document.querySelectorAll("nav a[aria-current]").forEach(a=>a.setAttribute("aria-current","page"));
+m[0]=="dashboard"?dash():view(m);document.title=m[1]+" · Living Spring";nav.classList.remove("open");$("#menu").setAttribute("aria-expanded","false");scrollTo(0,0)}
+addEventListener("hashchange",route);route();
+$("#menu").onclick=()=>{const o=nav.classList.toggle("open");$("#menu").setAttribute("aria-expanded",o)};
+$("#theme").onclick=()=>{const r=document.documentElement,d=r.dataset.theme?r.dataset.theme=="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=d?"light":"dark"};
+</script>
+</body>
+</html>
