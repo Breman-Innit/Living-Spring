@@ -93,6 +93,38 @@ td.act{white-space:nowrap;text-align:right}
 .hb{display:grid;grid-template-columns:96px 1fr 40px;gap:10px;align-items:center;margin:10px 0;font-size:13px}.hb i{display:block;height:10px;border-radius:3px;background:var(--primary)}.hb b{font-weight:500;text-align:right}
 .seg{display:flex;height:14px;border-radius:3px;overflow:hidden;gap:2px;margin:18px 0 14px}.seg i{display:block}
 .lg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--mfg)}.lg span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:6px}
+.scrim,.nav-out{display:none}
+@media(max-width:860px){
+main{padding:28px 16px 48px}
+.top{padding:0 12px;gap:8px}
+.btn{height:44px}#theme{width:44px}
+nav a{padding:12px;font-size:15px}
+.scrim{display:block;position:fixed;inset:calc(56px + env(safe-area-inset-top,0px)) 0 0;background:#0b151088;z-index:24;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+nav.open+.scrim{opacity:1;pointer-events:auto}
+}
+@media(max-width:640px){
+input,select{font-size:16px}
+h1{font-size:30px}
+#signout{display:none}.nav-out{display:block;width:calc(100% - 24px);margin:16px 12px 24px}
+.bar{flex-direction:column;align-items:stretch}.bar .btn{width:100%}.search{min-width:0;width:100%}
+.chips{flex-wrap:nowrap;overflow-x:auto;margin-inline:-16px;padding:0 16px 4px;scrollbar-width:none}.chip{flex:none;min-height:40px;padding:0 16px}
+.tw{border:0;overflow:visible}
+table,thead,tbody,tr,td{display:block;min-width:0;width:100%}
+thead{position:absolute;left:-9999px}
+tr{border:1px solid var(--border);border-radius:6px;padding:6px 14px;margin-bottom:12px}tbody tr:hover{background:none}
+td{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid var(--border);text-align:right;overflow-wrap:anywhere}
+td:before{content:attr(data-label);color:var(--mfg);font-size:13px;text-align:left;flex:none}
+td:last-child{border-bottom:0}
+td:first-child{display:block;text-align:left;font-size:16px}td:first-child:before{content:none}
+td.act{justify-content:flex-end;gap:8px}td.act:before{content:none}.lnk{min-height:44px;padding:0 14px}
+.stats{grid-template-columns:1fr 1fr;gap:20px 16px}.stats b{font-size:26px}
+.grid,.charts{grid-template-columns:1fr}
+.hb{grid-template-columns:80px 1fr 38px}
+.row{padding:14px 8px}
+dialog{margin:auto 0 0;width:100%;max-width:100%;border-radius:12px 12px 0 0;border-bottom:0;padding:20px 16px calc(20px + env(safe-area-inset-bottom,0px))}
+.fa .btn{flex:1}.ib{width:44px;height:44px}
+.toast{left:16px;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));display:flex;justify-content:space-between;align-items:center;transform:translateY(20px)}.toast.on{transform:none}
+}
 </style>
 </head>
 <body>
@@ -104,7 +136,7 @@ td.act{white-space:nowrap;text-align:right}
 <button class="av" id="who" type="button" aria-label="Signed-in user"></button><button class="btn g" id="signout" type="button">Sign out</button>
 </header>
 <div class="shell">
-<nav id="nav" aria-label="Main"></nav>
+<nav id="nav" aria-label="Main"></nav><div class="scrim" id="scrim"></div>
 <main id="main" tabindex="-1"></main>
 </div>
 <div class="toast" id="toast" role="status"></div>
@@ -175,7 +207,7 @@ main.innerHTML=`<h1>${m[1]}</h1><p class="lead">${m[2]}${ed_?"":" You have view-
 <div class="chips" id="chips">${["All",...sts].map(s=>`<button class="chip" aria-pressed="${s=="All"}">${esc(s)}</button>`).join("")}</div><div id="out"></div>`;
 const out=$("#out");
 function draw(){const r=m[5].map((x,i)=>[x,i]).filter(([x])=>(st=="All"||x[x.length-1]==st)&&x.join(" ").toLowerCase().includes(q));
-out.innerHTML=r.length?`<div class="tw"><table><thead><tr>${m[4].map(c=>`<th scope="col">${c}</th>`).join("")}${ed_?'<th scope="col" style="text-align:right">Actions</th>':""}</tr></thead><tbody>${r.map(([x,i])=>`<tr>${x.map((c,k)=>k==x.length-1?`<td>${tag(c)}</td>`:`<td${k?' style="color:var(--mfg)"':' style="font-weight:500"'}>${esc(c)}</td>`).join("")}${ed_?`<td class="act"><button class="lnk" data-e="${i}" aria-label="Edit ${esc(x[0])}">Edit</button><button class="lnk" data-d="${i}" aria-label="Delete ${esc(x[0])}">Delete</button></td>`:""}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">${m[5].length?"Nothing matches your search.":"No records yet."}<br><button id="clr">${m[5].length?"Clear filters":m[3]}</button></div>`;
+out.innerHTML=r.length?`<div class="tw"><table><thead><tr>${m[4].map(c=>`<th scope="col">${c}</th>`).join("")}${ed_?'<th scope="col" style="text-align:right">Actions</th>':""}</tr></thead><tbody>${r.map(([x,i])=>`<tr>${x.map((c,k)=>k==x.length-1?`<td data-label="${m[4][k]}">${tag(c)}</td>`:`<td data-label="${m[4][k]}"${k?' style="color:var(--mfg)"':' style="font-weight:500"'}>${esc(c)}</td>`).join("")}${ed_?`<td class="act"><button class="lnk" data-e="${i}" aria-label="Edit ${esc(x[0])}">Edit</button><button class="lnk" data-d="${i}" aria-label="Delete ${esc(x[0])}">Delete</button></td>`:""}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">${m[5].length?"Nothing matches your search.":"No records yet."}<br><button id="clr">${m[5].length?"Clear filters":m[3]}</button></div>`;
 const c=$("#clr");if(c)c.onclick=()=>{if(!m[5].length)return ed_&&openForm(m);q="";st="All";$("#q").value="";sync();draw()}}
 const sync=()=>document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.textContent==st));
 $("#q").oninput=e=>{q=e.target.value.toLowerCase();draw()};
@@ -191,9 +223,10 @@ $("#x").onclick=$("#cx").onclick=()=>dlg.close();
 function route(){if(!user)return;let m=byId(location.hash.slice(1)||"dashboard")||M[0];if(!allowed(m)){m=M[0];toast("Your role can't open that area")}
 nav.querySelectorAll("a").forEach(a=>a.dataset.id==m[0]?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
 m[0]=="dashboard"?dash():view(m);document.title=m[1]+" · Living Spring";nav.classList.remove("open");$("#menu").setAttribute("aria-expanded","false");scrollTo(0,0)}
-function showApp(){$("#login").hidden=!!user;if(!user)return;$("#who").textContent=user.name.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();$("#who").title=user.name+" · "+user.role;$("#who").setAttribute("aria-label","Signed in as "+user.name+", "+user.role);nav.innerHTML=M.filter(allowed).map(m=>`<a href="#${m[0]}" data-id="${m[0]}">${m[1]}</a>`).join("");route()}
+function showApp(){$("#login").hidden=!!user;if(!user)return;$("#who").textContent=user.name.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();$("#who").title=user.name+" · "+user.role;$("#who").setAttribute("aria-label","Signed in as "+user.name+", "+user.role);nav.innerHTML=M.filter(allowed).map(m=>`<a href="#${m[0]}" data-id="${m[0]}">${m[1]}</a>`).join("")+'<button class="btn nav-out" id="signout2" type="button">Sign out</button>';route()}
 $("#lf").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);user={name:String(f.get("name")).trim(),role:f.get("role")};try{localStorage.setItem(SES,JSON.stringify(user))}catch{}showApp()};
-$("#signout").onclick=()=>{user=null;try{localStorage.removeItem(SES)}catch{}location.hash="";$("#lf").reset();showApp()};
+document.addEventListener("click",e=>{if(!e.target.closest("#signout,#signout2"))return;user=null;try{localStorage.removeItem(SES)}catch{}location.hash="";$("#lf").reset();showApp()});
+$("#scrim").onclick=()=>{nav.classList.remove("open");$("#menu").setAttribute("aria-expanded","false")};
 addEventListener("hashchange",route);showApp();
 $("#menu").onclick=()=>{const o=nav.classList.toggle("open");$("#menu").setAttribute("aria-expanded",o)};
 const tb=$("#theme"),sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>',moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>';
