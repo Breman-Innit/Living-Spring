@@ -25,8 +25,6 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .btn:hover{background:var(--muted)}
 .btn.p{background:var(--primary);border-color:var(--primary);color:var(--primary-fg)}.btn.p:hover{opacity:.9;background:var(--primary)}
 .btn.g{border-color:transparent}
-#theme{width:40px;padding:0;display:grid;place-items:center}
-#theme svg{width:19px;height:19px;display:block}
 #menu{display:none}
 .shell{display:flex;max-width:1280px;margin:0 auto}
 nav{width:248px;flex:none;border-right:1px solid var(--border);padding:16px 12px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto}
@@ -70,6 +68,31 @@ nav{position:fixed;top:calc(56px + env(safe-area-inset-top,0px));left:0;bottom:0
 nav.open{transform:none}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#theme{width:40px;padding:0;display:grid;place-items:center}#theme svg{width:19px;height:19px;display:block}
+button.av{border:0;cursor:pointer}
+dialog{width:min(480px,calc(100vw - 32px));max-height:calc(100vh - 32px);margin:auto;padding:24px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg)}
+dialog::backdrop{background:#0b1510a8}
+.mh{display:flex;justify-content:space-between;gap:16px;margin-bottom:20px}.mh p{color:var(--mfg);font-size:14px;margin-top:4px}
+.ib{width:36px;height:36px;border:1px solid var(--border);border-radius:6px;background:var(--bg);cursor:pointer;font-size:20px}
+.ff{display:grid;gap:14px}.ff label{display:grid;gap:6px;color:var(--mfg);font-size:13px;font-weight:500}
+.ff input,.ff select,.lf input[type=text]{width:100%;height:44px;padding:0 12px;border:1px solid var(--border);border-radius:6px;background:var(--bg)}
+.fa{display:flex;justify-content:flex-end;gap:8px;margin-top:24px}
+.toast.act{pointer-events:auto}.toast button{margin-left:14px;background:none;border:0;color:inherit;text-decoration:underline;cursor:pointer}
+.lnk{background:none;border:0;color:var(--primary);cursor:pointer;padding:4px 8px;border-radius:6px}.lnk:hover{background:var(--primary-soft)}
+td.act{white-space:nowrap;text-align:right}
+#login{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:20px;overflow:auto}#login[hidden]{display:none}
+.lf{width:min(420px,100%);display:grid;gap:20px}.lf p{color:var(--mfg)}
+.roles{display:grid;gap:8px;border:0;padding:0}.roles legend{font-size:13px;font-weight:500;color:var(--mfg);margin-bottom:8px}
+.roles label{display:flex;gap:12px;align-items:center;border:1px solid var(--border);border-radius:6px;padding:12px 14px;cursor:pointer}
+.roles label:has(input:checked){border-color:var(--primary);background:var(--primary-soft)}.roles small{display:block;color:var(--mfg)}
+.roles input{accent-color:var(--primary)}
+.charts{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-bottom:48px}
+.chart{border:1px solid var(--border);border-radius:6px;padding:20px}.chart h3{font-size:17px;margin-bottom:4px}.chart>p{color:var(--mfg);font-size:13px;margin-bottom:16px}
+.chart svg{width:100%;height:auto;display:block}.chart text{fill:var(--mfg);font-size:11px;font-family:Inter,sans-serif}
+.hb{display:grid;grid-template-columns:96px 1fr 40px;gap:10px;align-items:center;margin:10px 0;font-size:13px}.hb i{display:block;height:10px;border-radius:3px;background:var(--primary)}.hb b{font-weight:500;text-align:right}
+.seg{display:flex;height:14px;border-radius:3px;overflow:hidden;gap:2px;margin:18px 0 14px}.seg i{display:block}
+.lg{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:13px;color:var(--mfg)}.lg span:before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--c);margin-right:6px}
 </style>
 </head>
 <body>
@@ -77,15 +100,25 @@ nav.open{transform:none}
 <button class="btn g" id="menu" aria-label="Open menu" aria-expanded="false">Menu</button>
 <a class="brand" href="#dashboard"><span class="dot"></span>Living Spring</a>
 <span class="sp"></span>
-<button class="btn g" id="theme" type="button" aria-label="Switch to dark mode" title="Switch to dark mode"></button>
-<div class="av" aria-label="Signed in as Grace Mensah" title="Grace Mensah">GM</div>
+<button class="btn g" id="theme" type="button"></button>
+<button class="av" id="who" type="button" aria-label="Signed-in user"></button><button class="btn g" id="signout" type="button">Sign out</button>
 </header>
 <div class="shell">
 <nav id="nav" aria-label="Main"></nav>
 <main id="main" tabindex="-1"></main>
 </div>
 <div class="toast" id="toast" role="status"></div>
+<dialog id="dlg" aria-labelledby="rt"><form id="rf"><div class="mh"><div><h2 id="rt"></h2><p id="rd"></p></div><button class="ib" type="button" id="x" aria-label="Close">×</button></div><div class="ff" id="ff"></div><div class="fa"><button class="btn" type="button" id="cx">Cancel</button><button class="btn p" type="submit">Save record</button></div></form></dialog>
+<div id="login"><form class="lf" id="lf"><div><a class="brand" href="#" style="margin-bottom:20px"><span class="dot"></span>Living Spring</a><h1>Sign in</h1><p style="margin-top:8px">Choose your role to see the areas you can use. This demo does not check passwords.</p></div>
+<label class="ff" style="gap:6px"><span style="color:var(--mfg);font-size:13px;font-weight:500">Your name</span><input type="text" name="name" placeholder="e.g. Grace Mensah" autocomplete="name" required></label>
+<fieldset class="roles"><legend>Role</legend>
+<label><input type="radio" name="role" value="Administrator" checked><span>Administrator<small>Full access to every area, can add, edit and delete</small></span></label>
+<label><input type="radio" name="role" value="Instructor"><span>Instructor<small>Teaching areas, can add, edit and delete</small></span></label>
+<label><input type="radio" name="role" value="Student"><span>Student<small>Own learning areas, view only</small></span></label></fieldset>
+<button class="btn p" type="submit" style="height:44px">Sign in</button></form></div>
+
 <script>
+
 const M=[
 ["dashboard","Dashboard","A clear view of today across classes, people and payments."],
 ["users","User Management","Create accounts, assign roles and control who can sign in.","Add user",["Name","Role","Email","Status"],[["Ama Boateng","Admin","ama@livingspring.edu","Active"],["Kojo Asare","Instructor","kojo@livingspring.edu","Active"],["Efua Owusu","Student","efua@livingspring.edu","Active"],["Yaw Darko","Registrar","yaw@livingspring.edu","Suspended"]]],
@@ -108,39 +141,64 @@ const M=[
 ["calendar","Academic Calendar Management","Terms, holidays, exams and school events.","Add event",["Event","Date","Audience","Status"],[["Mid-term break","24 Nov","Everyone","Upcoming"],["Parents' evening","3 Dec","Guardians","Upcoming"],["End of term exams","12 Dec","Students","Upcoming"],["Carol service","18 Dec","Everyone","Upcoming"]]],
 ["admin","System Administration","Roles, backups, audit history and school settings.","Add role",["Setting","Area","Updated","Status"],[["Role permissions","Security","Today","Configured"],["Nightly backup","Data","03:00","Healthy"],["Grading scale","Academic","1 Sep","Configured"],["Audit log retention","Security","90 days","Review"]]]
 ];
-const $=s=>document.querySelector(s),main=$("#main"),nav=$("#nav");
-const toast=t=>{const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),2200)};
-nav.innerHTML=M.map(m=>`<a href="#${m[0]}" data-id="${m[0]}">${m[1]}</a>`).join("");
-const tag=s=>`<span class="tag ${/Draft|Closed|Paused|Not marked|Unread|Pending|Awaiting|Overdue|Suspended|Needs|Review|Running|On leave|Part/.test(s)?"m":""}">${s}</span>`;
+const $=s=>document.querySelector(s),main=$("#main"),nav=$("#nav"),dlg=$("#dlg"),KEY="ls-records-v2",SES="ls-session-v1";
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ACC={Administrator:null,Instructor:["dashboard","students","courses","content","assignments","exams","grading","attendance","progress","messages","forums","classroom","calendar"],Student:["dashboard","courses","content","assignments","exams","grading","progress","messages","forums","classroom","certificates","payments","calendar"]};
+let user=null,ed=null;
+try{const sv=JSON.parse(localStorage.getItem(KEY)||"{}");M.forEach(m=>{if(Array.isArray(sv[m[0]]))m[5]=sv[m[0]]})}catch{}
+try{user=JSON.parse(localStorage.getItem(SES)||"null")}catch{}
+const allowed=m=>!ACC[user.role]||ACC[user.role].includes(m[0]),canEdit=()=>user.role!=="Student",byId=id=>M.find(m=>m[0]==id);
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(Object.fromEntries(M.map(m=>[m[0],m[5]]))))}catch{toast("Could not save in this browser")}};
+function toast(t,act,fn){const e=$("#toast");e.textContent=t;if(act){const b=document.createElement("button");b.textContent=act;b.onclick=()=>{fn();e.classList.remove("on")};e.append(b)}e.classList.toggle("act",!!act);e.classList.add("on");clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove("on"),act?5000:2200)}
+const refresh=m=>{if((location.hash.slice(1)||"dashboard")==m[0])view(m)};
+const tag=s=>`<span class="tag ${/Draft|Closed|Paused|Not marked|Unread|Pending|Awaiting|Overdue|Suspended|Needs|Review|Running|On leave|Part/.test(s)?"m":""}">${esc(s)}</span>`;
+function charts(){
+const att=[["Mon",96],["Tue",94],["Wed",95],["Thu",91],["Fri",94]];
+const col=att.map((d,i)=>{const h=d[1]*1.1,x=24+i*56;return `<rect x="${x}" y="${130-h}" width="36" height="${h}" rx="3" fill="var(--primary)"/><text x="${x+18}" y="${124-h}" text-anchor="middle">${d[1]}%</text><text x="${x+18}" y="146" text-anchor="middle">${d[0]}</text>`}).join("");
+const gr=byId("grading")[5].map(r=>`<div class="hb"><span>${esc(r[1])}</span><i style="width:${parseInt(r[2])||0}%"></i><b>${esc(r[2])}</b></div>`).join("");
+let fee="";
+if(user.role=="Administrator"){const c={};byId("payments")[5].forEach(r=>c[r[3]]=(c[r[3]]||0)+1);const col2={Paid:"var(--primary)","Part paid":"var(--border)",Overdue:"var(--fg)"},ks=Object.keys(c);
+fee=`<div class="chart"><h3>Fee status</h3><p>Term payments by status</p><div class="seg" role="img" aria-label="Fee status">${ks.map(k=>`<i style="flex:${c[k]};background:${col2[k]||"var(--mfg)"}"></i>`).join("")}</div><div class="lg">${ks.map(k=>`<span style="--c:${col2[k]||"var(--mfg)"}">${esc(k)} ${c[k]}</span>`).join("")}</div></div>`}
+return `<div class="charts"><div class="chart"><h3>Attendance this week</h3><p>Share of students present each day</p><svg viewBox="0 0 310 156" role="img" aria-label="Attendance by day">${col}</svg></div><div class="chart"><h3>Average grade</h3><p>By subject, latest term</p>${gr}</div>${fee}</div>`}
 function dash(){
-const rows=[["Science: Cells","Live class · 10:00","S"],["Parents' evening","3 December","P"],["Term 2 fees","14 families still owe","F"],["Mathematics grades","Form 3A awaiting review","G"]];
-main.innerHTML=`<h1>Good morning, Admin</h1><p class="lead">Here is what is happening at Living Spring today.</p>
+const rows=[["Science: Cells","Live class · 10:00","S","classroom"],["Parents' evening","3 December","P","calendar"],["Term 2 fees","14 families still owe","F","payments"],["Mathematics grades","Form 3A awaiting review","G","grading"]].filter(r=>allowed(byId(r[3])));
+main.innerHTML=`<h1>Good morning, ${esc(user.name.split(/\s+/)[0])}</h1><p class="lead">Signed in as ${user.role.toLowerCase()}. Here is what is happening at Living Spring today.</p>
 <div class="stats"><div><b>642</b><span>Students enrolled</span></div><div><b>38</b><span>Instructors</span></div><div><b>94%</b><span>Attendance today</span></div><div><b>GH₵ 18,400</b><span>Fees collected this week</span></div></div>
+${canEdit()?charts():""}
 <div class="sh"><h2>Needs attention</h2></div>
-${rows.map(r=>`<a class="row" href="#${r[2]=="S"?"classroom":r[2]=="P"?"calendar":r[2]=="F"?"payments":"grading"}"><div class="av">${r[2]}</div><div><b style="font-weight:500">${r[0]}</b><small>${r[1]}</small></div><span class="ar">→</span></a>`).join("")}
-<div class="sec"><div class="sh"><h2>All areas</h2></div><div class="grid">${M.slice(1).map(m=>`<a class="row" href="#${m[0]}"><div class="av">${m[1][0]}</div><div style="font-weight:500">${m[1]}</div></a>`).join("")}</div></div>`}
+${rows.map(r=>`<a class="row" href="#${r[3]}"><div class="av">${r[2]}</div><div><b style="font-weight:500">${r[0]}</b><small>${r[1]}</small></div><span class="ar">→</span></a>`).join("")}
+<div class="sec"><div class="sh"><h2>All areas</h2></div><div class="grid">${M.slice(1).filter(allowed).map(m=>`<a class="row" href="#${m[0]}"><div class="av">${m[1][0]}</div><div style="font-weight:500">${m[1]}</div></a>`).join("")}</div></div>`}
 function view(m){
-const sts=[...new Set(m[5].map(r=>r[r.length-1]))];let st="All",q="";
-main.innerHTML=`<h1>${m[1]}</h1><p class="lead">${m[2]}</p>
-<div class="bar"><input class="search" id="q" type="search" placeholder="Search ${m[1].toLowerCase()}" aria-label="Search"><button class="btn p" id="add">${m[3]}</button></div>
-<div class="chips" id="chips">${["All",...sts].map(s=>`<button class="chip" aria-pressed="${s=="All"}">${s}</button>`).join("")}</div><div id="out"></div>`;
+const sts=[...new Set(m[5].map(r=>r[r.length-1]))],ed_=canEdit();let st="All",q="";
+main.innerHTML=`<h1>${m[1]}</h1><p class="lead">${m[2]}${ed_?"":" You have view-only access."}</p>
+<div class="bar"><input class="search" id="q" type="search" placeholder="Search ${m[1].toLowerCase()}" aria-label="Search">${ed_?`<button class="btn p" id="add">${m[3]}</button>`:""}</div>
+<div class="chips" id="chips">${["All",...sts].map(s=>`<button class="chip" aria-pressed="${s=="All"}">${esc(s)}</button>`).join("")}</div><div id="out"></div>`;
 const out=$("#out");
-function draw(){const r=m[5].filter(r=>(st=="All"||r[r.length-1]==st)&&r.join(" ").toLowerCase().includes(q));
-out.innerHTML=r.length?`<div class="tw"><table><thead><tr>${m[4].map(c=>`<th scope="col">${c}</th>`).join("")}</tr></thead><tbody>${r.map(r=>`<tr>${r.map((c,i)=>i==r.length-1?`<td>${tag(c)}</td>`:`<td${i?' style="color:var(--mfg)"':' style="font-weight:500"'}>${c}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">Nothing matches your search.<br><button id="clr">Clear filters</button></div>`;
-const c=$("#clr");if(c)c.onclick=()=>{q="";st="All";$("#q").value="";sync();draw()}}
+function draw(){const r=m[5].map((x,i)=>[x,i]).filter(([x])=>(st=="All"||x[x.length-1]==st)&&x.join(" ").toLowerCase().includes(q));
+out.innerHTML=r.length?`<div class="tw"><table><thead><tr>${m[4].map(c=>`<th scope="col">${c}</th>`).join("")}${ed_?'<th scope="col" style="text-align:right">Actions</th>':""}</tr></thead><tbody>${r.map(([x,i])=>`<tr>${x.map((c,k)=>k==x.length-1?`<td>${tag(c)}</td>`:`<td${k?' style="color:var(--mfg)"':' style="font-weight:500"'}>${esc(c)}</td>`).join("")}${ed_?`<td class="act"><button class="lnk" data-e="${i}" aria-label="Edit ${esc(x[0])}">Edit</button><button class="lnk" data-d="${i}" aria-label="Delete ${esc(x[0])}">Delete</button></td>`:""}</tr>`).join("")}</tbody></table></div>`:`<div class="empty">${m[5].length?"Nothing matches your search.":"No records yet."}<br><button id="clr">${m[5].length?"Clear filters":m[3]}</button></div>`;
+const c=$("#clr");if(c)c.onclick=()=>{if(!m[5].length)return ed_&&openForm(m);q="";st="All";$("#q").value="";sync();draw()}}
 const sync=()=>document.querySelectorAll(".chip").forEach(b=>b.setAttribute("aria-pressed",b.textContent==st));
 $("#q").oninput=e=>{q=e.target.value.toLowerCase();draw()};
 $("#chips").onclick=e=>{if(e.target.classList.contains("chip")){st=e.target.textContent;sync();draw()}};
-$("#add").onclick=()=>toast(m[3]+" is ready to start");draw()}
-function route(){const id=location.hash.slice(1)||"dashboard",m=M.find(x=>x[0]==id)||M[0];
-document.querySelectorAll("nav a").forEach(a=>a.toggleAttribute("aria-current",a.dataset.id==m[0]));
-document.querySelectorAll("nav a[aria-current]").forEach(a=>a.setAttribute("aria-current","page"));
+out.onclick=e=>{const b=e.target.closest("button");if(!b)return;if(b.dataset.e!=null)openForm(m,+b.dataset.e);if(b.dataset.d!=null){const i=+b.dataset.d,row=m[5].splice(i,1)[0];save();refresh(m);toast("Record deleted","Undo",()=>{m[5].splice(i,0,row);save();refresh(m)})}};
+if(ed_)$("#add").onclick=()=>openForm(m);draw()}
+function openForm(m,i){ed={m,i};const row=i==null?[]:m[5][i],sts=[...new Set(m[5].map(r=>r[r.length-1]))];
+$("#rt").textContent=i==null?m[3]:"Edit record";$("#rd").textContent=(i==null?"Add a record to ":"Update this record in ")+m[1].toLowerCase()+".";
+$("#ff").innerHTML=m[4].map((l,k)=>`<label>${l}${k==m[4].length-1&&sts.length?`<select name="f${k}" required>${sts.map(s=>`<option${s==row[k]?" selected":""}>${esc(s)}</option>`).join("")}</select>`:`<input name="f${k}" value="${esc(row[k]??"")}" autocomplete="off" required>`}</label>`).join("");
+dlg.showModal();$("#ff input").focus()}
+$("#rf").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target),{m,i}=ed,row=m[4].map((_,k)=>String(f.get("f"+k)||"").trim());if(row.some(v=>!v))return;i==null?m[5].unshift(row):m[5][i]=row;save();dlg.close();refresh(m);toast(i==null?"Record added":"Changes saved")};
+$("#x").onclick=$("#cx").onclick=()=>dlg.close();
+function route(){if(!user)return;let m=byId(location.hash.slice(1)||"dashboard")||M[0];if(!allowed(m)){m=M[0];toast("Your role can't open that area")}
+nav.querySelectorAll("a").forEach(a=>a.dataset.id==m[0]?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current"));
 m[0]=="dashboard"?dash():view(m);document.title=m[1]+" · Living Spring";nav.classList.remove("open");$("#menu").setAttribute("aria-expanded","false");scrollTo(0,0)}
-addEventListener("hashchange",route);route();
+function showApp(){$("#login").hidden=!!user;if(!user)return;$("#who").textContent=user.name.split(/\s+/).map(w=>w[0]).join("").slice(0,2).toUpperCase();$("#who").title=user.name+" · "+user.role;$("#who").setAttribute("aria-label","Signed in as "+user.name+", "+user.role);nav.innerHTML=M.filter(allowed).map(m=>`<a href="#${m[0]}" data-id="${m[0]}">${m[1]}</a>`).join("");route()}
+$("#lf").onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);user={name:String(f.get("name")).trim(),role:f.get("role")};try{localStorage.setItem(SES,JSON.stringify(user))}catch{}showApp()};
+$("#signout").onclick=()=>{user=null;try{localStorage.removeItem(SES)}catch{}location.hash="";$("#lf").reset();showApp()};
+addEventListener("hashchange",route);showApp();
 $("#menu").onclick=()=>{const o=nav.classList.toggle("open");$("#menu").setAttribute("aria-expanded",o)};
-const themeButton=$("#theme"),sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>',moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>';
-function updateThemeButton(){const dark=document.documentElement.dataset.theme==="dark",label=dark?"Switch to light mode":"Switch to dark mode";themeButton.innerHTML=dark?sun:moon;themeButton.setAttribute("aria-label",label);themeButton.title=label}
-updateThemeButton();themeButton.onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";updateThemeButton()};
+const tb=$("#theme"),sun='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg>',moon='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.9 13A9 9 0 0 1 11 3.1 9 9 0 1 0 20.9 13Z"/></svg>';
+function th(){const d=document.documentElement.dataset.theme=="dark",l=d?"Switch to light mode":"Switch to dark mode";tb.innerHTML=d?sun:moon;tb.setAttribute("aria-label",l);tb.title=l}
+th();tb.onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme=="dark"?"light":"dark";th()};
 </script>
 </body>
 </html>
